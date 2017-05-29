@@ -1,0 +1,125 @@
+div.select-specify{
+	width: 20%;
+}
+
+div.select-specify div.items{
+	border: 1px #eee solid;
+	padding: 5px;
+	border-radius: 5px 5px 0px 0px;
+	border-bottom: none;
+	min-height: 25px;
+}
+
+div.select-specify div.items span.placeholder{
+	color: #aaa;
+	padding: 5px; 
+    text-decoration:none; 
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 0 5px;
+	display: inline-block;
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none;
+}
+
+div.select-specify div.input-bar{
+	background: #eee;
+	border: 1px solid #eee;
+	border-top: none;
+	padding: 8px;
+	border-radius: 0px 0px 5px 5px;
+}
+
+div.select-specify div.input-bar a.add{
+	color: black;
+	font-size: 12px;
+	padding: 4px;
+	display: inline-block;
+	text-decoration: none;
+	background: #f9f9f9;
+	margin-top: 3px;
+	border: 1px solid #ccc;
+}
+
+div.select-specify div.input-bar a.add:hover{
+	background: #333;
+	color: snow;
+}
+
+div.select-specify div.input-bar select.proper-select{
+	width: 38%;
+	border: #d1d1d1 1px solid;
+	padding: 5px;
+}
+
+div.select-specify div.input-bar span.value{
+	margin-top: 3px;
+}
+
+
+div.select-specify div.input-bar span.keyword{
+	float: right;
+	color: #aaa;
+	font-size: 13px;
+	width: 55%;
+	display: block;
+	padding-top: 0px;
+}
+
+div.select-specify div.input-bar span.keyword input{
+	width: 55%;
+	border: #d1d1d1 1px solid;
+	padding: 5px;
+}
+
+div.select-specify div.items div.item{
+	display: inline-block;
+	background-color: #e4e4e4;
+    border: 1px solid #ddd;
+    border-radius: 0px;
+    font-size: 15px;
+    font-weight: normal!important;
+    cursor: default;
+    padding: 5px; 
+    text-decoration:none; 
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 0 5px;
+   	cursor: pointer;
+   	transition: all .1s;
+}
+
+div.select-specify div.items div.item.selected{
+	background: #034483;
+	color: #f9f9f9;
+	border-color: #17436D;
+}
+
+div.select-specify div.items div.item span[role="remove"]{
+	transition: all .3s;
+	font-size: 0px;
+}
+
+div.select-specify div.items div.item:hover span[role="remove"]{
+	font-size: 14px;
+}
+
+div.select-specify div.items div.item span.attr{
+	transition: all .3s;
+	font-size: 0px;
+	color: #666;
+}
+
+div.select-specify div.items div.item span.attr:not(:empty):before{
+	content: '(';
+}
+
+div.select-specify div.items div.item span.attr:not(:empty):after{
+	content: ')';
+}
+
+div.select-specify div.items div.item:hover span.attr{
+	font-size: 11px;
+
+}
