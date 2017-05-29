@@ -25,13 +25,10 @@
             <option value='1'>Apple</option>
             <option value='2'>Pear</option>
             <option value='3'>Orange</option>
-        </select> <br />      <select class='st2' data-heading='Antonyms' style='width: 40%;'>
-     <!--        <option role='load' data-value='1' data-attr='voorbeeld' /> 
-            <option role='load' data-value='1' data-attr='voorbeeld' /> 
-            <option role='load' data-value='1' data-attr='voorbeeld' />  -->
-            <option value='1'>man</option>
-            <option value='2'>vrouw</option>
         </select>
+
+
+        <br /> 
 
             <a class='submit'>submit</a>
             <script type='text/javascript'>

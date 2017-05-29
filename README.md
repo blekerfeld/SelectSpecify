@@ -35,7 +35,8 @@ The links (and attributes) are stored inside a javascript object that can be acc
   $('.example').data('storage');
 </script>
 ```
-After being send to the server, to PHP via AJAX for example, the example shown above (with apple being selected, with the attribute pear), looks like this:
+
+After being send to the server, to PHP via AJAX for example, the example shown above (with 'apple' being selected, the being attribute 'cake'), looks like this:
 
 ```
 array (size=1)
@@ -44,3 +45,19 @@ array (size=1)
       'value' => string '1' (length=1)
       'keyword' => string 'cake' (length=4)
 ```
+
+# Options
+
+## Pre-loaded items
+
+Preloading options is a bit more complex than just giving `selected` attributes to the options, because SelectSpecify allows the same option to be selected more than once. Preloaded options need to be specified seperatly within the select element like this:
+
+```html
+<select class='example'>
+  <option role='load' data-value='1' data-attr='cake' /> 
+  <option value='1'>Apple</option>
+  <option value='2'>Pear</option>
+</select>
+``` 
+
+`<option>` elements with a ` role='load' ` attribute, are rendered as pre-loaded values, the `data-value` attribute holds the value, that means there needs to be a regular option-element with the same value. The `data-attr` attribute holds the specification (i.e. the keyword).
