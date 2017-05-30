@@ -18,6 +18,9 @@ SelectSpecify is a jQuery-plugin that turns a select-element into a linking tabl
 </select>
 ```
 
+#### Title
+A title can be added by setting the `data-heading`-attribute of the original `<select>`-element.
+
 ## Javascript
 
 ```html
@@ -71,7 +74,7 @@ There are three options related to the attribute (the extra bit of information o
 
 ```javascript
 {
-	'attributeName': 'score',				// The name that is visable in the array returned
+	'attributeName': 'score',	// The name that is visable in the array returned
 	'attributeSurface': 'Simularity score'	// The name that is rendered as label
 }
 ```
@@ -80,7 +83,11 @@ Instead of a textbox holding the attributive value, any other element that is ca
 
 ```javascript
 {
-	'attributeElement': '<select><option value="0%">0%</option><option value="25%">25%</option><option value="50%">50%</option><option value="75%">75%</option><option value="100%">100%</option></select>',				
+	'attributeElement': '<select>
+		<option value="0%">0%</option><option value="25%">25%</option>
+		<option value="50%">50%</option><option value="75%">75%</option>
+		<option value="100%">100%</option>
+	</select>',				
 }
 ```
 
@@ -108,5 +115,37 @@ By default duplicates are not allowed, that means that every option in the origi
 ```javascript
 {
 	'noDuplicates': false,			
+}
+```
+
+#### Select2-intergration
+It is very easy to use SelectSpecify together with Select2, just set `select2` to `true` and specify any options for select2 in `select2options`.
+
+```javascript
+{
+	'select2': true,
+	'select2options': {
+		// Any additional select2 options
+	}			
+}
+```
+
+#### Placeholder
+By default the placeholder is 'Add item', this can be changes through the `placeholder`-option
+```javascript
+{
+	'placeholder': 'Add links',			
+}
+```
+
+#### Localisation
+The strings inside the elements can be easily changed by setting some options.
+```javascript
+{
+	itemLabelText: 'Item',
+    addButtonText: 'Add',
+    removeButtonText: 'Remove',
+    saveButtonText: 'Save',
+    placeholder: 'Add items',
 }
 ```
