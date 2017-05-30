@@ -142,6 +142,12 @@ div.select-specify div.items div.item.selected{
 	border-radius: 3px;
 }
 
+div.select-specify div.items div.item span[role="remove"]:hover{
+	font-style: italic;
+	font-weight: bolder;
+}
+
+
 div.select-specify div.items div.item span[role="remove"]{
 	transition: all .3s;
 	font-size: 0px;

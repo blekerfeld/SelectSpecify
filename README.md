@@ -44,11 +44,11 @@ array (size=1)
     array (size=2)
       'value' => string '1' (length=1)
       'keyword' => string 'cake' (length=4)
-```
+```	
 
-# Options
+## Options
 
-## Pre-loaded items
+### Pre-loaded items
 
 Preloading options is a bit more complex than just giving `selected` attributes to the options, because SelectSpecify allows the same option to be selected more than once. Preloaded options need to be specified seperatly within the select element like this:
 
@@ -61,3 +61,52 @@ Preloading options is a bit more complex than just giving `selected` attributes 
 ``` 
 
 `<option>` elements with a ` role='load' ` attribute, are rendered as pre-loaded values, the `data-value` attribute holds the value, that means there needs to be a regular option-element with the same value. The `data-attr` attribute holds the specification (i.e. the keyword).
+
+### All available options
+
+#### Attribute
+There are three options related to the attribute (the extra bit of information on each link). `attributeName`, `attributeSurface` and `attributeElement`. 
+
+##### attributeName and attributeSurface
+
+```javascript
+{
+	'attributeName': 'score',				// The name that is visable in the array returned
+	'attributeSurface': 'Simularity score'	// The name that is rendered as label
+}
+```
+##### attributeElement
+Instead of a textbox holding the attributive value, any other element that is capable of holding a value is allowed. For example another `<select>`-element with predefined options might be provided:
+
+```javascript
+{
+	'attributeElement': '<select><option value="0%">0%</option><option value="25%">25%</option><option value="50%">50%</option><option value="75%">75%</option><option value="100%">100%</option></select>',				
+}
+```
+
+#### Theme and width
+A theme class can be easily added by setting the `theme`-option. At the moment of writing no additional themes are shipped with SelectSpecify, but it is very much possible to create your own. Just copy the styles in `jquery.selectspecify.css` and add a theme class to the main-container (`select-specify.yourthemename`) and style how you like.
+
+```javascript
+{
+	'theme': 'yourtheme',			
+}
+```
+
+
+The width is taken from the original `<select>`-element, `auto` is assumed if there is no width. The width can be overriden by giving `width` as an option:
+
+```javascript
+{
+	'width': '20%',			
+}
+```
+
+#### Duplicates
+By default duplicates are not allowed, that means that every option in the original select-element can only be selected and attributed once. Setting the option `noDuplicates` to `false` makes it possible to select the same option multiple times with different attributes. 
+
+```javascript
+{
+	'noDuplicates': false,			
+}
+```

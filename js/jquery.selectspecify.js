@@ -7,6 +7,8 @@
 
 jQuery.fn.selectSpecify = function(options){
 
+	// Getting the initial selector
+	var selector = $(this).parents().map(function() { return this.tagName; }).get().reverse().concat([this.nodeName]).join(">");var id = $(this).attr("id");if (id) { selector += "#"+ id;}var classNames = $(this).attr("class");if (classNames) {selector += "." + $.trim(classNames).replace(/\s/gi, ".");}
 
 	var mainClass =  $(this).attr('class');
 	var count = 0;
@@ -15,15 +17,15 @@ jQuery.fn.selectSpecify = function(options){
 	var recentDeleted = 0;
 	var settings = $.extend({
         theme: '',
-        noDuplicates: false, 
+        width: '',
+        noDuplicates: true, 
         attributeName: 'keyword',
         attributeSurface: 'Keyword',
         attributeElement: '<input />',
-        prompt: 'Link existing items',
+        itemLabelText: 'Item',
         addButtonText: 'Add',
-        addButtonClass: '',
+        removeButtonText: 'Remove',
         saveButtonText: 'Save',
-        saveButtonClass: '',
         select2: false,
         select2options: {},
         placeholder: 'Add items',
@@ -33,30 +35,49 @@ jQuery.fn.selectSpecify = function(options){
 
 	// First we need to get the select box that is the main element, clone it and remove the data-options from
 	// the original, then copy the original element's inner html.
-	var selectClone = $('.' + mainClass).clone();
-	$('.' + mainClass).children('option[data-value]').each(function(){
+	var selectClone = $(selector).clone();
+	$(selector).children('option[data-value]').each(function(){
 		$(this).remove();
 	});
-	var selectBoxHtml = $('.' + mainClass).html();
+	var selectBoxHtml = $(selector).html();
 
 	// Now it's time to build a div with everything we need
-	$('.' + mainClass).replaceWith($('<div />').addClass(mainClass).addClass('select-specify').append());
-	$('.' + mainClass).append($('<div />').addClass('items'));
-	$('.' + mainClass + ' .items').append($('<span />').addClass('placeholder').html(settings.placeholder));
-	$('.' + mainClass).append($('<div />').addClass('input-bar'));
-	$('.' + mainClass + ' .input-bar').append($('<span />').addClass('value').append($('<select />').addClass('proper-select').html(selectBoxHtml))).append(' ');
-	$('.' + mainClass + ' .input-bar').append($('<span />').addClass('keyword').append(settings.attributeSurface + ': ').append($(settings.attributeElement).addClass('proper-keyword'))).append('<br />');
-	$('.' + mainClass + ' .input-bar').append($('<a />').attr('href', 'javascript:void(0);').addClass('add ' + settings.addButtonClass).html(settings.addButtonText));
+	$(selector).replaceWith($('<div />').addClass(mainClass).addClass('select-specify ' + settings.theme).append());
+	// Cloning parents width, or taking the specified width
+	if(settings.width === ''){
+		if(selectClone.css('width') != '0px'){
+			$(selector).css('width', selectClone.css('width'));
+		}
+		else{
+			$(selector).css('width', 'auto');
+		}
+	}else{
+		$(selector).css('width', settings.width);
+	}
+	$(selector).append($('<div />').addClass('items'));
+	$(selector + ' .items').append($('<span />').addClass('placeholder').html(settings.placeholder));
+	$(selector).append($('<div />').addClass('input-bar'));
+	$(selector + ' .input-bar').append($('<span />').addClass('value').append(settings.itemLabelText + ': <br />').
+		append(
+		$('<select />').addClass('proper-select').html(selectBoxHtml)
+		).append('<br />').append($('<a />').attr('href', 'javascript:void(0);').addClass('add').html(settings.addButtonText))).append(' ');
+	$(selector + ' .input-bar').append($('<span />').addClass('keyword').append(settings.attributeSurface + ': ').append($(settings.attributeElement).addClass('proper-keyword').attr('type', 'search'))).append('<br />');
+	$(selector + ' .input-bar span.value').append($('<a />').attr('href', 'javascript:void(0);').addClass('remove ' + settings.addButtonClass).html(settings.removeButtonText));
+	$(selector + ' .items').wrap("<div class='items-outer'></div>")
+
+	if(selectClone.data('heading')){
+		$(selector + ' .items-outer').prepend($('<h3 />').append(selectClone.data('heading')));
+	}
 
 	// Calling select2 if needed
 	if(settings.select2 == true){
-		$('.' + mainClass + ' .input-bar select.proper-select').select2(settings.select2options);
+		$(selector + ' .input-bar select.proper-select').select2(settings.select2options);
 	}
 
 
 	function createItem(attr, value){
-		$('.' + mainClass + '.placeholder').hide();
-		var valueText = $('.' + mainClass + ' .proper-select option[value="' + value + '"]').html();
+		$(selector + '.placeholder').hide();
+		var valueText = $(selector + ' .proper-select option[value="' + value + '"]').html();
 		$('div.' + mainClass + ' .items').append(
 			$('<div/>')
 		    .attr({'id' : currentID, 'data-value': value, 'data-attr': attr})
@@ -67,16 +88,18 @@ jQuery.fn.selectSpecify = function(options){
  		    .append($('<span/>').addClass('attr').html(attr))
 		);
 		currentID++;
-		$('.' + mainClass + ' .items').on('click', 'div.item span[role="remove"]', function(){
-			$('.' + mainClass + ' .items .item-' + $(this).attr('id')).slideUp(100).remove();
+		$(selector + ' .items').on('click', 'div.item span[role="remove"]', function(){
+			$(selector + ' .items .item-' + $(this).attr('id')).slideUp(100).remove();
 			update();
-			$('.' + mainClass + ' .input-bar .proper-keyword').val('');
+			$(selector + ' .input-bar .proper-keyword').val('');
 			selectedID = 0;
 			count--;
-			$('.' + mainClass + ' .input-bar .proper-keyword').blur().val('');
+			$(selector + ' .input-bar .proper-keyword').blur().val('');
 			recentDeleted = $(this).attr('id');
+			$(selector + ' .input-bar .add').html(settings.addButtonText);
+			$(selector + ' .input-bar span.value .remove').hide();
 		});
-		$('.' + mainClass + ' .items').on('click', 'div.item', function(){
+		$(selector + ' .items').on('click', 'div.item', function(){
 			doFocus($(this));
 		});
 		update();
@@ -92,29 +115,30 @@ jQuery.fn.selectSpecify = function(options){
 
 
 	// Adding existing translations
-	$('.' + mainClass + ' .add').click(function(){
+	$(selector + ' .add').click(function(){
 
 		if(selectedID != 0){
-			$('.' + mainClass + ' .items .item-' + selectedID).remove();
+			$(selector + ' .items .item-' + selectedID).remove();
 		}
 
-		var value = $('.' + mainClass + ' .input-bar .proper-select').val();
-		var attr = $('.' + mainClass + ' .input-bar .proper-keyword').val();
+		var value = $(selector + ' .input-bar .proper-select').val();
+		var attr = $(selector + ' .input-bar .proper-keyword').val();
 		
 		currentID++;
 
-		var $children = $('.items').find('.item[data-value="' + value + '"]');
+		var $children = $(selector + ' .items').find('.item[data-value="' + value + '"]');
 
 		if($children.length != 0 && settings.noDuplicates){
-			// do something that gives the error.
+			// $(selector + ' .input-bar').fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+			$(selector + ' .item[data-value="' + value + '"]').fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
 			return false;
 		}
 
 		createItem(attr, value);
 
-		$('.' + mainClass + ' .input-bar .proper-keyword').val('');
+		$(selector + ' .input-bar .proper-keyword').val('');
 
-		$('.' + mainClass + ' .input-bar .add').html(settings.addButtonText);
+		$(selector + ' .input-bar .add').html(settings.addButtonText);
 
 		selectedID = 0;
 
@@ -125,7 +149,7 @@ jQuery.fn.selectSpecify = function(options){
 		
 		count = 0;
 
-		$('.' + mainClass + ' .items').children('div.item').each(function(){
+		$(selector + ' .items').children('div.item').each(function(){
 				pushThis = {};
 				pushThis['value'] = $(this).data('value'),
 				pushThis[settings.attributeName] = $(this).data('attr'),
@@ -134,16 +158,20 @@ jQuery.fn.selectSpecify = function(options){
 			}
 		);
 		
-		$('.' + mainClass).data('storage', storage);
+		$(selector).data('storage', storage);
+		$(selector).val(storage);
 		
 		selectedID = 0;
 
 		if(count == 0){
-			$('.' + mainClass + ' .placeholder').show();
+			$(selector + ' .placeholder').show();
 		}
 		else{
-			$('.' + mainClass + ' .placeholder').hide();
+			$(selector + ' .placeholder').hide();
 		}
+
+		$(selector + ' .input-bar .add').html(settings.addButtonText);
+		$(selector + ' .input-bar span.value .remove').hide();
 
 	}
 
@@ -153,27 +181,54 @@ jQuery.fn.selectSpecify = function(options){
 		if(recentDeleted === obj.attr('id')){
 			return false;
 		}
-		$('.' + mainClass + ' .item.selected').removeClass('selected');
+		$(selector + ' .item.selected').removeClass('selected');
 		if(selectedID === obj.attr('id')){
 			doUnfocus(obj);
 			return false;
 		}
 		obj.addClass('selected');
 		selectedID = obj.attr('id');
-		$('.' + mainClass + ' .proper-select').val(obj.data('value'));
-		$('.' + mainClass + ' .input-bar .proper-keyword').val(obj.data('attr'));
-		$('.' + mainClass + ' .input-bar .proper-keyword').focus();
-		$('.' + mainClass + ' .input-bar .add').html(settings.saveButtonText);
+		$(selector + ' .proper-select').val(obj.data('value'));
+		$(selector + ' .input-bar .proper-keyword').val(obj.data('attr'));
+		$(selector + ' .input-bar .proper-keyword').focus();
+		$(selector + ' .input-bar .add').html(settings.saveButtonText);
+		$(selector + ' .input-bar span.value .remove').css('display', 'inline-block');
 	}
 	
 
 	function doUnfocus(obj){
 		obj.removeClass('selected');
-		$('.' + mainClass + ' .input-bar .proper-keyword').val('');
+		$(selector + ' .input-bar .proper-keyword').val('');
 		selectedID = 0;
-		$('.' + mainClass + ' .input-bar .add').html(settings.addButtonText);
+		$(selector + ' .input-bar .add').html(settings.addButtonText);
+		$(selector + ' .input-bar span.value .remove').hide();
 	}
 
+	function doUnselect(e){
+		 //Do nothing if div.items was not directly clicked
+     	if(e.target !== e.currentTarget) return;
+		
+		if(selectedID != 0){
+			selectedID = 0;
+			$(selector + ' .item.selected').removeClass('selected');
+			$(selector + ' .input-bar .proper-keyword').val('');
+			$(selector + ' .input-bar .add').html(settings.addButtonText);
+			$(selector + ' .input-bar span.value .remove').hide();
+		}
+	}
+
+
+	$(selector + ' div.items').click(function(e){
+		doUnselect(e);
+	});
+
+	$(selector + ' div.input-bar').click(function(e){
+		doUnselect(e);
+	});
+
+	$(selector + ' .input-bar .remove').click(function(e){
+		$(selector + ' div.item-' + selectedID + ' span[role="remove"]').click();
+	});
 
  	return this;
 };
