@@ -83,10 +83,7 @@ Instead of a textbox holding the attributive value, any other element that is ca
 
 ```javascript
 {
-	'attributeElement': '<select>
-		<option value="0%">0%</option><option value="25%">25%</option>
-		<option value="50%">50%</option><option value="75%">75%</option>
-		<option value="100%">100%</option>
+	'attributeElement': '<select><option value="0%">0%</option><option value="25%">25%</option><option value="50%">50%</option><option value="75%">75%</option><option value="100%">100%</option>
 	</select>',				
 }
 ```
@@ -142,7 +139,7 @@ By default the placeholder is 'Add item', this can be changes through the `place
 The strings inside the elements can be easily changed by setting some options.
 ```javascript
 {
-	itemLabelText: 'Item',
+    itemLabelText: 'Item',
     addButtonText: 'Add',
     removeButtonText: 'Remove',
     saveButtonText: 'Save',
